@@ -1,0 +1,50 @@
+.todo-component {
+  display: flex;
+  justify-content: space-between;
+  background-color: aliceblue;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 4px;
+  width: 300px;
+}
+
+.todo-input,
+.todo-text,
+.todo-completed {
+  padding: 10px;
+}
+
+.todo-completed {
+  text-decoration: line-through;
+}
+
+.todo-button-box {
+  margin: 5px;
+}
+.todo-button {
+  background-color: #f44336;
+  border: none;
+  color: white;
+  padding: 3px 7px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-inline: 5px;
+}
+.todo-button-edit {
+  background-color: green;
+  border: none;
+  color: white;
+  padding: 3px 10px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.todo-button:hover {
+  opacity: 80%;
+}
+.todo-button-edit:hover {
+  opacity: 80%;
+}

@@ -1,0 +1,11 @@
+.modal-box {
+  position: absolute;
+  z-index: 100;
+  top: 50%;
+  left: 39%;
+  background-color: rgb(255, 255, 255);
+  width: 400px;
+  height: 200px;
+  border-radius: 4px;
+  border: none;
+}

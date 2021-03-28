@@ -1,0 +1,15 @@
+.sort-button {
+  background-color: orange;
+  border: none;
+  color: white;
+  padding: 10px;
+  margin-left: 12px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.sort-button:hover {
+  opacity: 80%;
+}
