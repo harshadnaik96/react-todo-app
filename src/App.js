@@ -4,7 +4,6 @@ import "./App.css";
 import AddTodo from "./Components/AddTodo/AddTodo";
 import SortTodo from "./Components/SortTodo/SortTodo";
 import Todos from "./Components/Todos/Todos";
-import Modal from "./Components/UI/Modal/Modal";
 import Aux from "./hoc/Aux";
 
 import { v4 as uuidv4 } from "uuid";
