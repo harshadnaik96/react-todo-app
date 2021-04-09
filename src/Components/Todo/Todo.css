@@ -50,9 +50,3 @@
   cursor: pointer;
   border-radius: 5px;
 }
-.todo-button:hover {
-  opacity: 80%;
-}
-.todo-button-edit:hover {
-  opacity: 80%;
-}
