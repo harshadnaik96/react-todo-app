@@ -1,8 +1,7 @@
-import todo from "../Todo/Todo";
 import "./EditTodoForm.css";
 
-const editTodoForm = ({ todo, editTodoChange, editConfirm, cancelEdit }) => {
-  let val = todo.map((el) => el.title);
+const editTodoForm = ({ editTodoChange, editConfirm, cancelEdit, todo }) => {
+  const val = todo.map((el) => el.title);
   return (
     <div className='container'>
       <input
