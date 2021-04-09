@@ -1,4 +1,3 @@
-import React from "react";
 import "./SortTodo.css";
 
 const sortTodo = ({ todos, showCompleted, showAll }) => {
