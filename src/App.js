@@ -133,6 +133,9 @@ function App() {
       <div className='component'>
         <p>
           You have {todos.filter((todo) => todo.completed === false).length}{" "}
+          {todos.filter((todo) => todo.completed === false).length > 1
+            ? "tasks"
+            : "task"}{" "}
           left to complete.
         </p>
       </div>
