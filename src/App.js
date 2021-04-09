@@ -131,6 +131,12 @@ function App() {
         />
       </div>
       <div className='component'>
+        <p>
+          You have {todos.filter((todo) => todo.completed === false).length}{" "}
+          left to complete.
+        </p>
+      </div>
+      <div className='component'>
         {toggleShowIncomplete === true ? (
           <Todos
             todos={sort}
