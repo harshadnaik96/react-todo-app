@@ -9,3 +9,9 @@
   cursor: pointer;
   border-radius: 5px;
 }
+
+@media (min-width: 600px) {
+  .sort-button:hover {
+    opacity: 80%;
+  }
+}

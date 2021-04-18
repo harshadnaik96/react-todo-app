@@ -6,6 +6,9 @@ import SortTodo from "./Components/SortTodo/SortTodo";
 import Todos from "./Components/Todos/Todos";
 import EditTodoForm from "./Components/EditTodoForm/EditTodoForm";
 import Modal from "./Components/UI/Modal/Modal";
+import Snackbar from "./Components/UI/Snackbar/Snackbar";
+import Axios from "./axios-todos";
+
 import Aux from "./hoc/Aux";
 
 import { v4 as uuidv4 } from "uuid";
@@ -19,6 +22,7 @@ const App: React.FC = () => {
   const [selectEditTodo, setSelectEditTodo] = useState<ITodo[]>([]);
   const [editedName, setEditedName] = useState("");
   const [toggleModal, setToggleModal] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const todoNameRef = useRef<HTMLInputElement>(null);
   const ref = useRef<HTMLInputElement>(null);
@@ -40,6 +44,34 @@ const App: React.FC = () => {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(todos));
   }, [todos]);
 
+  //post the todos on to firebase
+  useEffect(() => {
+    const Todo = {
+      todo: {
+        ...todos,
+      },
+    };
+    Axios.post("/todos.json", Todo)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+    handleSnackbarClick();
+  }, [todos]);
+
+  // Snackbar handler
+  const handleSnackbarClick = () => {
+    setOpen(true);
+  };
+
+  // Snackbar handler
+  const handleSnackbarClose = (
+    event?: React.SyntheticEvent,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
   //function to add todo
   const handleAddTodo = () => {
     const name = todoNameRef.current!.value;
@@ -110,6 +142,11 @@ const App: React.FC = () => {
 
   return (
     <Aux>
+      <Snackbar
+        snackbarOpen={open}
+        snackbarHandleClick={handleSnackbarClick}
+        snackbarHandleClose={handleSnackbarClose}
+      />
       <Modal show={toggleModal}>
         <EditTodoForm
           todo={selectEditTodo}
