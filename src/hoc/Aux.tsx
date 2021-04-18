@@ -1,6 +1,6 @@
 import React from "react";
 
-const aux = (props) => {
+const Aux: React.FC = (props) => {
   return <>{props.children}</>;
 };
-export default aux;
+export default Aux;

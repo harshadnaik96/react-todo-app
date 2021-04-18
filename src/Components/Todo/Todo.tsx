@@ -1,6 +1,14 @@
 import "./Todo.css";
+import { ITodo, ID } from "../../todo.model";
 
-const todo = ({
+interface TodoProps {
+  todo: ITodo;
+  checkTodoComplete: (id: ID) => void;
+  handleTodoDelete: (id: ID) => void;
+  handleTodoEdit: (id: ID) => void;
+}
+
+const Todo: React.FC<TodoProps> = ({
   todo,
   checkTodoComplete,
   handleTodoDelete,
@@ -40,4 +48,4 @@ const todo = ({
     </div>
   );
 };
-export default todo;
+export default Todo;

@@ -9,17 +9,19 @@ import Modal from "./Components/UI/Modal/Modal";
 import Aux from "./hoc/Aux";
 
 import { v4 as uuidv4 } from "uuid";
+import { ITodo, ID } from "./todo.model";
 
 const LOCAL_STORAGE_KEY = "todos.todoapp";
 
-function App() {
-  const [todos, setTodos] = useState([]);
+const App: React.FC = () => {
+  const [todos, setTodos] = useState<ITodo[]>([]);
   const [toggleShowIncomplete, setToggleShowIncomplete] = useState(false);
-  const [selectEditTodo, setSelectEditTodo] = useState([]);
+  const [selectEditTodo, setSelectEditTodo] = useState<ITodo[]>([]);
   const [editedName, setEditedName] = useState("");
   const [toggleModal, setToggleModal] = useState(false);
 
-  const todoNameRef = useRef();
+  const todoNameRef = useRef<HTMLInputElement>(null);
+  const ref = useRef<HTMLInputElement>(null);
 
   // filter to display complete & incomplete todos
   const incompleteFilter = [...todos];
@@ -29,7 +31,7 @@ function App() {
 
   //retrieves the todos if present in the local storage( // * runs only ones)
   useEffect(() => {
-    const storeTodo = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
+    const storeTodo = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)!);
     if (storeTodo) setTodos(storeTodo);
   }, []);
 
@@ -40,48 +42,47 @@ function App() {
 
   //function to add todo
   const handleAddTodo = () => {
-    const name = todoNameRef.current.value;
+    const name = todoNameRef.current!.value;
     if (name === "") return;
-    setTodos([
-      ...todos,
+    setTodos((prevTodos) => [
+      ...prevTodos,
       {
         id: uuidv4(),
         title: name,
         completed: false,
       },
     ]);
-    todoNameRef.current.value = null;
+    todoNameRef.current!.value = "";
   };
 
   //function to toggle todo item
-  const handleTodoCompleteToggle = (id) => {
+  const handleTodoCompleteToggle = (id: ID) => {
     const newTodo = [...todos];
     const todo = newTodo.find((todo) => todo.id === id);
-    todo.completed = !todo.completed;
+    todo!.completed = !todo?.completed;
     setTodos(newTodo);
   };
 
   //function to delete todo item
-  const handleClickTodoDelete = (id) => {
+  const handleClickTodoDelete = (todoId: string) => {
     const newTodo = [...todos];
-    const todo = newTodo.filter((todo) => todo.id !== id);
+    const todo = newTodo.filter((todo) => todo.id !== todoId);
     setTodos(todo);
   };
 
   // Function to edit todo item
-  const handleClickEditTodo = (id) => {
+  const handleClickEditTodo = (todoId: string) => {
     const newTodo = [...todos];
-    const todo = newTodo.filter((todo) => todo.id === id);
+    const todo = newTodo.filter((todo) => todo.id === todoId);
     setSelectEditTodo(todo);
     setToggleModal(true);
   };
 
   // Function to edit selected todo item
-  const handleEditTodo = (e) => {
-    const name = e.target.value;
+  const handleEditTodo = () => {
+    const name = ref.current!.value;
     setEditedName(name);
   };
-
   // Function to confirm todo edit
   const handleEditConfirm = () => {
     const newTodo = [...todos];
@@ -112,7 +113,8 @@ function App() {
       <Modal show={toggleModal}>
         <EditTodoForm
           todo={selectEditTodo}
-          editTodoChange={handleEditTodo}
+          editRef={ref}
+          editTodoHandler={handleEditTodo}
           editConfirm={handleEditConfirm}
           cancelEdit={handleCancelEdit}
         />
@@ -158,5 +160,5 @@ function App() {
       </div>
     </Aux>
   );
-}
+};
 export default App;

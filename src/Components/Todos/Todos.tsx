@@ -1,7 +1,21 @@
 import Todo from "../Todo/Todo";
 import Aux from "../../hoc/Aux";
 
-const todos = ({ todos, toggleTodo, deleteTodo, editTodo }) => {
+import { ID } from "../../todo.model";
+
+interface TodoList {
+  todos: { id: ID; title: string; completed: boolean }[];
+  toggleTodo: (id: ID) => void;
+  deleteTodo: (id: ID) => void;
+  editTodo: (id: ID) => void;
+}
+
+const Todos: React.FC<TodoList> = ({
+  todos,
+  toggleTodo,
+  deleteTodo,
+  editTodo,
+}) => {
   return (
     <Aux>
       {todos.map((todo, id) => (
@@ -16,4 +30,4 @@ const todos = ({ todos, toggleTodo, deleteTodo, editTodo }) => {
     </Aux>
   );
 };
-export default todos;
+export default Todos;

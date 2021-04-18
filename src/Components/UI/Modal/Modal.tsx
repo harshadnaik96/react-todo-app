@@ -1,6 +1,6 @@
 import "./Modal.css";
 
-const modal = (props) => {
+const Modal: React.FC<{ show: boolean }> = (props) => {
   return (
     <div
       style={{
@@ -13,4 +13,4 @@ const modal = (props) => {
     </div>
   );
 };
-export default modal;
+export default Modal;

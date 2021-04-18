@@ -1,9 +1,15 @@
 import "./AddTodo.css";
 
-const addTodo = ({ todoRef, addTodo }) => {
+interface IAddTodoProps {
+  todoRef: React.RefObject<HTMLInputElement>;
+  addTodo: () => void;
+}
+
+const AddTodo: React.FC<IAddTodoProps> = ({ todoRef, addTodo }) => {
   return (
     <div className='addtodo-component'>
       <input
+        id='todoText'
         ref={todoRef}
         type='text'
         placeholder='add todo'
@@ -15,4 +21,4 @@ const addTodo = ({ todoRef, addTodo }) => {
     </div>
   );
 };
-export default addTodo;
+export default AddTodo;
