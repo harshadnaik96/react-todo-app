@@ -10,35 +10,31 @@ function Alert(props: AlertProps) {
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     width: "100%",
-    "& > * + *": {
-      marginBottom: theme.spacing(2),
-    },
   },
 }));
 
 interface ISnackbar {
+  snack: any;
   snackbarOpen: boolean;
-  snackbarHandleClick: () => void;
+  snackbarHandleClick: (variant: any) => void;
   snackbarHandleClose: () => void;
 }
 const CustomizedSnackbars: React.FC<ISnackbar> = ({
+  snack,
   snackbarOpen,
   snackbarHandleClick,
   snackbarHandleClose,
 }) => {
   const classes = useStyles();
-
   return (
     <div className={classes.root}>
       <Snackbar
         open={snackbarOpen}
-        autoHideDuration={2000}
+        autoHideDuration={2100}
         onClick={snackbarHandleClick}
         onClose={snackbarHandleClose}
       >
-        <Alert onClose={snackbarHandleClose} severity='success'>
-          success, saved to Firebase
-        </Alert>
+        <Alert severity={snack.severity}>{snack.text}</Alert>
       </Snackbar>
       {/* <Alert severity='error'>This is an error message!</Alert>
       <Alert severity='warning'>This is a warning message!</Alert>

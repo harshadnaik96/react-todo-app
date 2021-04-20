@@ -7,14 +7,26 @@ import Todos from "./Components/Todos/Todos";
 import EditTodoForm from "./Components/EditTodoForm/EditTodoForm";
 import Modal from "./Components/UI/Modal/Modal";
 import Snackbar from "./Components/UI/Snackbar/Snackbar";
-import Axios from "./axios-todos";
-
 import Aux from "./hoc/Aux";
 
 import { v4 as uuidv4 } from "uuid";
 import { ITodo, ID } from "./todo.model";
+import { database, dbConnectState } from "./db/db";
 
 const LOCAL_STORAGE_KEY = "todos.todoapp";
+
+// Snackbar messages object
+const variant = {
+  variantSuccess: {
+    text: "Success, your data is synced to Firebase",
+    severity: "success",
+  },
+  variantInfo: { text: "You are Online", severity: "info" },
+  variantError: {
+    text: "It seems you are Offline, check your connection",
+    severity: "error",
+  },
+};
 
 const App: React.FC = () => {
   const [todos, setTodos] = useState<ITodo[]>([]);
@@ -23,15 +35,11 @@ const App: React.FC = () => {
   const [editedName, setEditedName] = useState("");
   const [toggleModal, setToggleModal] = useState(false);
   const [open, setOpen] = useState(false);
+  const [isOnline, setIsOnline] = useState(true);
+  const [snack, setSnack] = useState(variant.variantSuccess);
 
   const todoNameRef = useRef<HTMLInputElement>(null);
   const ref = useRef<HTMLInputElement>(null);
-
-  // filter to display complete & incomplete todos
-  const incompleteFilter = [...todos];
-  const sort = incompleteFilter.filter((todo) =>
-    todo.completed === false ? todo.id : null
-  );
 
   //retrieves the todos if present in the local storage( // * runs only ones)
   useEffect(() => {
@@ -44,34 +52,47 @@ const App: React.FC = () => {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(todos));
   }, [todos]);
 
-  //post the todos on to firebase
+  // post the todos on to firebase
   useEffect(() => {
     const Todo = {
       todo: {
         ...todos,
       },
     };
-    Axios.post("/todos.json", Todo)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-    handleSnackbarClick();
+    database.push(Todo);
+    handleSnackbarClick(setSnack(variant.variantSuccess));
   }, [todos]);
 
+  // get todos from firebase
+  useEffect(() => {
+    database.limitToLast(1).once("child_added", (snap) => {
+      setTodos(snap.val().todo);
+    });
+  }, []);
+
+  // check database connection constantly and triggers snackbar
+  useEffect(() => {
+    dbConnectState.on("value", (snap) => {
+      if (snap.val() === true) {
+        handleSnackbarClick(setSnack(variant.variantInfo));
+        setIsOnline(true);
+      } else {
+        handleSnackbarClick(setSnack(variant.variantError));
+        setIsOnline(false);
+      }
+    });
+  }, [isOnline]);
+
   // Snackbar handler
-  const handleSnackbarClick = () => {
+  const handleSnackbarClick = (snack: any) => {
     setOpen(true);
   };
 
   // Snackbar handler
-  const handleSnackbarClose = (
-    event?: React.SyntheticEvent,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") {
-      return;
-    }
+  const handleSnackbarClose = () => {
     setOpen(false);
   };
+
   //function to add todo
   const handleAddTodo = () => {
     const name = todoNameRef.current!.value;
@@ -143,6 +164,7 @@ const App: React.FC = () => {
   return (
     <Aux>
       <Snackbar
+        snack={snack}
         snackbarOpen={open}
         snackbarHandleClick={handleSnackbarClick}
         snackbarHandleClose={handleSnackbarClose}
@@ -170,31 +192,41 @@ const App: React.FC = () => {
         />
       </div>
       <div className='component'>
-        <p>
-          You have {todos.filter((todo) => todo.completed === false).length}{" "}
-          {todos.filter((todo) => todo.completed === false).length > 1
-            ? "tasks"
-            : "task"}{" "}
-          left to complete.
-        </p>
-      </div>
-      <div className='component'>
-        {toggleShowIncomplete === true ? (
-          <Todos
-            todos={sort}
-            toggleTodo={handleTodoCompleteToggle}
-            deleteTodo={handleClickTodoDelete}
-            editTodo={handleClickEditTodo}
-          />
-        ) : (
-          <Todos
-            todos={todos}
-            toggleTodo={handleTodoCompleteToggle}
-            deleteTodo={handleClickTodoDelete}
-            editTodo={handleClickEditTodo}
-          />
+        {todos.filter((todo) => todo).length < 1 ? null : (
+          <p>
+            You have {todos.filter((todo) => todo.completed === false).length}{" "}
+            {todos.filter((todo) => todo.completed === false).length > 1
+              ? "tasks"
+              : "task"}{" "}
+            left to complete.
+          </p>
         )}
       </div>
+      {todos.filter((todo) => todo).length < 1 ? (
+        <div className='component'>
+          <h3>📝 Start adding Todos...</h3>
+        </div>
+      ) : (
+        <div className='component'>
+          {toggleShowIncomplete === true ? (
+            <Todos
+              todos={todos.filter((todo) =>
+                todo.completed === false ? todo.id : null
+              )}
+              toggleTodo={handleTodoCompleteToggle}
+              deleteTodo={handleClickTodoDelete}
+              editTodo={handleClickEditTodo}
+            />
+          ) : (
+            <Todos
+              todos={todos}
+              toggleTodo={handleTodoCompleteToggle}
+              deleteTodo={handleClickTodoDelete}
+              editTodo={handleClickEditTodo}
+            />
+          )}
+        </div>
+      )}
     </Aux>
   );
 };
