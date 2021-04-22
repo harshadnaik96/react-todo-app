@@ -25,9 +25,9 @@
   background-color: red;
 }
 
-@media (min-width: 600px) {
+/* @media (min-width: 600px) {
   .edit-todo-button:hover,
   .cancel-edit-todo-button:hover {
     opacity: 80%;
   }
-}
+} */
