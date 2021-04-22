@@ -30,16 +30,12 @@ const CustomizedSnackbars: React.FC<ISnackbar> = ({
     <div className={classes.root}>
       <Snackbar
         open={snackbarOpen}
-        autoHideDuration={2100}
+        autoHideDuration={snack.duration}
         onClick={snackbarHandleClick}
         onClose={snackbarHandleClose}
       >
         <Alert severity={snack.severity}>{snack.text}</Alert>
       </Snackbar>
-      {/* <Alert severity='error'>This is an error message!</Alert>
-      <Alert severity='warning'>This is a warning message!</Alert>
-      <Alert severity='info'>This is an information message!</Alert>
-      <Alert severity='success'>This is a success message!</Alert> */}
     </div>
   );
 };

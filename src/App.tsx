@@ -20,11 +20,13 @@ const variant = {
   variantSuccess: {
     text: "Success, your data is synced to Firebase",
     severity: "success",
+    duration: 2100,
   },
-  variantInfo: { text: "You are Online", severity: "info" },
+  variantInfo: { text: "You are Online", severity: "info", duration: 2100 },
   variantError: {
     text: "It seems you are Offline, check your connection",
     severity: "error",
+    duration: 3200,
   },
 };
 
@@ -84,7 +86,7 @@ const App: React.FC = () => {
   }, [isOnline]);
 
   // Snackbar handler
-  const handleSnackbarClick = (snack: any) => {
+  const handleSnackbarClick = (_snack: any) => {
     setOpen(true);
   };
 
