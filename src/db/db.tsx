@@ -1,7 +1,7 @@
 import firebase from "firebase";
 
 firebase.initializeApp({
-  databaseURL: "https://react-todo-app-6bc35-default-rtdb.firebaseio.com/",
+  databaseURL: process.env.REACT_APP_FIREBASE_URL,
 });
 export const database = firebase.database().ref("todos");
 

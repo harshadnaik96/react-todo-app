@@ -62,7 +62,6 @@ const App: React.FC = () => {
       },
     };
     database.push(Todo);
-    handleSnackbarClick(setSnack(variant.variantSuccess));
   }, [todos]);
 
   // get todos from firebase
