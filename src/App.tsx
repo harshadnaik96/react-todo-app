@@ -24,7 +24,7 @@ const variant = {
   },
   variantInfo: { text: "You are Online", severity: "info", duration: 2100 },
   variantError: {
-    text: "It seems you are Offline, check your connection",
+    text: "It seems you are offline, check your connection",
     severity: "error",
     duration: 3200,
   },
